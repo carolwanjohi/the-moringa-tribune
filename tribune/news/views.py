@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import datetime as dt
 
 # Create functions here
@@ -31,7 +31,7 @@ def welcome(request):
     '''
     return render(request, 'welcome.html')
 
-def news_of_day(request):
+def news_today(request):
     '''
     View function for the news of the current day
     '''
@@ -50,6 +50,12 @@ def past_days_news(request,past_date):
     except ValueError:
         # Raise 404 error when ValueError is thrown
         raise Http404()
+        assert False
+
+    if date == dt.date.today():
+        # Redirect to news_today
+        return redirect(news_today)
+
 
     return render(request, 'all-news/past-news.html', {"date":date})
 
