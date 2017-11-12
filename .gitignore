@@ -1,2 +1,5 @@
 .DS_Store
 virtual/
+*.pyc
+tribune/tribune/*.pyc
+tribune/news/*.pyc
