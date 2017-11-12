@@ -31,7 +31,7 @@ def welcome(request):
     '''
     View function for the root page
     '''
-    return HttpResponse('Welcome to Moringa Tribune')
+    return render(request, 'welcome.html')
 
 def news_of_day(request):
     '''
