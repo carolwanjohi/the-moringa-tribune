@@ -1,6 +1,30 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 import datetime as dt
+
+# Create functions here
+
+
+def convert_dates(dates):
+    '''
+    Function that takes a date object and returns the day of the week
+
+    Args:
+        date : date object
+
+    Returns:
+        day : day of the week
+    '''
+    # Get week day number from the date
+    day_number = dt.date.weekday(dates)
+
+    # List of days of the week
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    # Actual day of the week to be returned
+    day = days[day_number]
+
+    return day
 
 # Create your views here.
 def welcome(request):
@@ -27,25 +51,32 @@ def news_of_day(request):
             '''
     return HttpResponse(html)
 
-def convert_dates(dates):
+def past_days_news(request,past_date):
     '''
-    Function that takes a date object and returns the day of the week
-
-    Args:
-        date : date object
-
-    Returns:
-        day : day of the week
+    View function to return news from past dates
     '''
-    # Get week day number from the date
-    day_number = dt.date.weekday(dates)
+    try:
 
-    # List of days of the week
-    days = ['Monday', 'Tuesday', 'Wednewday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        # Convert data from the string url
+        date = dt.datetime.strptime(past_date, '%Y-%m-%d').date()
+    except ValueError:
+        # Raise 404 error when ValueError is thrown
+        raise Http404()
 
-    # Actual day of the week to be returned
-    day = days[day_number]
+    day = convert_dates(date)
 
-    return day
+    # Convert date object to find exact day
+    day = convert_dates(date)
+
+    html = f'''
+        <html>
+            <body>
+                <h1> News for {day} {date.day}-{date.month}-{date.year}</h1>
+            </body>
+        </html>
+            '''
+    return HttpResponse(html)
+
+
 
 
