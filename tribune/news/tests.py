@@ -165,12 +165,20 @@ class ArticleTestClass(TestCase):
 
     def test_get_news_by_date(self):
         '''
-        Test case to check if news is from a given date is gotten from a given day
+        Test case to check if news from a given date is gotten from the database
         '''
         test_date = '2017-03-17'
         date = dt.datetime.strptime(test_date, '%Y-%m-%d').date()
         news_by_date = Article.days_news(date)
         self.assertTrue( len(news_by_date) == 0)
+
+    def test_search_by_title(self):
+        '''
+        Test case to check if news containg a search term is gotten from the database 
+        '''
+        self.new_article.save_article()
+        found_news = Article.search_by_title('James')
+        self.assertTrue( len(found_news) == 1)
 
 
 

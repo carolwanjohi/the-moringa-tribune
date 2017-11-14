@@ -136,4 +136,18 @@ class Article(models.Model):
         news = cls.objects.filter(pub_date__date=date)
         return news
 
+    @classmethod
+    def search_by_title(cls,search_term):
+        '''
+        Method that gets news matching the specific search term
+
+        Args:
+            search_term : specific title from the user
+
+        Returns
+            news : list of news objects from the database matching the specific search term
+        '''
+        news = cls.objects.filter(title__icontains=search_term)
+        return news
+
 
