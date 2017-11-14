@@ -25,11 +25,11 @@ import datetime as dt
 #     return day
 
 # Create your views here.
-def welcome(request):
-    '''
-    View function for the root page
-    '''
-    return render(request, 'welcome.html')
+# def welcome(request):
+#     '''
+#     View function for the root page
+#     '''
+#     return render(request, 'welcome.html')
 
 def news_today(request):
     '''
