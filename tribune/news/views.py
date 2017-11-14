@@ -3,35 +3,7 @@ from django.shortcuts import render,redirect
 import datetime as dt
 from .models import Article
 
-# Create functions here
-# def convert_dates(dates):
-#     '''
-#     Function that takes a date object and returns the day of the week
-
-#     Args:
-#         date : date object
-
-#     Returns:
-#         day : day of the week
-#     '''
-#     # Get week day number from the date
-#     day_number = dt.date.weekday(dates)
-
-#     # List of days of the week
-#     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-#     # Actual day of the week to be returned
-#     day = days[day_number]
-
-#     return day
-
-# Create your views here.
-# def welcome(request):
-#     '''
-#     View function for the root page
-#     '''
-#     return render(request, 'welcome.html')
-
+# Create view functions here
 def news_today(request):
     '''
     View function for the news of the current day
@@ -39,7 +11,7 @@ def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()
 
-    return render(request, 'all-news/today-news.html', {"date":date,"news":news,})
+    return render(request, 'all-news/today-news.html', {"date":date,"news":news})
 
 def past_days_news(request,past_date):
     '''
@@ -59,7 +31,23 @@ def past_days_news(request,past_date):
         return redirect(news_today)
 
     news = Article.days_news(date)
-    return render(request, 'all-news/past-news.html', {"date":date,"news":news,})
+    return render(request, 'all-news/past-news.html', {"date":date,"news":news})
+
+def search_results(request):
+    '''
+    View function to display search results
+    '''
+    # Check if article query exists and if it has a value
+    if 'article' in request.GET and request.GET['article']:
+        search_term = request.GET.get('article')
+        searched_articles = Article.search_by_title(search_term)
+        message = f'{search_term}'
+        return render(request, 'all-news/search.html', {"message":message,"articles":searched_articles})
+
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'all-news/search.html', {"message":message})
+
 
 
 
