@@ -1,6 +1,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render,redirect
 import datetime as dt
+from .models import Article
 
 # Create functions here
 # def convert_dates(dates):
@@ -36,8 +37,9 @@ def news_today(request):
     View function for the news of the current day
     '''
     date = dt.date.today()
+    news = Article.todays_news()
 
-    return render(request, 'all-news/today-news.html', {"date":date,})
+    return render(request, 'all-news/today-news.html', {"date":date,"news":news,})
 
 def past_days_news(request,past_date):
     '''
@@ -56,8 +58,8 @@ def past_days_news(request,past_date):
         # Redirect to news_today
         return redirect(news_today)
 
-
-    return render(request, 'all-news/past-news.html', {"date":date})
+    news = Article.days_news(date)
+    return render(request, 'all-news/past-news.html', {"date":date,"news":news,})
 
 
 
