@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import Editor,Article,tags
+import datetime as dt
 
 # Create your tests here.
 class EditorTestClass(TestCase):
@@ -46,54 +47,6 @@ class EditorTestClass(TestCase):
         editors = Editor.objects.all()
         self.assertTrue( len(gotten_editors) == len(editors))
 
-class ArticleTestClass(TestCase):
-    '''
-    Test case for Article class
-    '''
-
-    # Set Up method
-    def setUp(self):
-        '''
-        Method that sets up an Article instance before each test
-        '''
-        self.james = Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
-        self.james.save_editor()
-
-        self.new_article = Article(title = 'Python James', post ='Python James is Muriuki who wrote Python content for Moringa School', editor=self.james)
-
-    def test_instance(self):
-        '''
-        Test case to check if self.new_article in an instance of Article class
-        '''
-        self.assertTrue( isinstance(self.new_article, Article) )
-
-    def test_save_article(self):
-        '''
-        Test case to check is an Article is saved in the database
-        '''
-        self.james.save_editor()
-        self.new_article.save_article()
-        artilces = Article.objects.all()
-        self.assertTrue( len(artilces) > 0 )
-
-    def test_delete_article(self):
-        '''
-        Test case to check if an article is deleted from the database
-        '''
-        self.new_article.save_article()
-        artilces = Article.objects.all()
-        self.new_article.delete_article()
-        self.assertTrue( len(artilces) == 0 )
-
-    def test_get_articles(self):
-        '''
-        Test case to check if all articles are gotten from the database
-        '''
-        self.new_article.save_article()
-        gotten_articles = Article.get_articles()
-        artilces = Article.objects.all()
-        self.assertTrue( len(gotten_articles) == len(artilces))
-
 class tagsTestClass(TestCase):
     '''
     Test case for tags class
@@ -137,6 +90,89 @@ class tagsTestClass(TestCase):
         gotten_tags = tags.get_tags()
         existing_tags = tags.objects.all()
         self.assertTrue( len(gotten_tags) == len(existing_tags))
+
+class ArticleTestClass(TestCase):
+    '''
+    Test case for Article class
+    '''
+
+    # Set Up method
+    def setUp(self):
+        '''
+        Method that sets up an Article instance before each test
+        '''
+        # Create and save an editor
+        self.james = Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
+        self.james.save_editor()
+
+        # Create and save a tag
+        self.tag = tags(name='Testing')
+        self.tag.save_tag()
+
+        self.new_article = Article(title = 'Python James', post ='Python James is Muriuki who wrote Python content for Moringa School', editor=self.james)
+        self.new_article.save_article()
+
+        self.new_article.tags.add(self.tag)
+
+    # def tearDown(self):
+    #     '''
+    #     Method to delete instances of models after each test
+    #     '''
+    #     Editor.objects.all().delete()
+    #     tags.objects.all().delete()
+    #     Article.objects.all().delete()
+
+    def test_instance(self):
+        '''
+        Test case to check if self.new_article in an instance of Article class
+        '''
+        self.assertTrue( isinstance(self.new_article, Article) )
+
+    def test_save_article(self):
+        '''
+        Test case to check is an Article is saved in the database
+        '''
+        self.james.save_editor()
+        self.new_article.save_article()
+        artilces = Article.objects.all()
+        self.assertTrue( len(artilces) > 0 )
+
+    def test_delete_article(self):
+        '''
+        Test case to check if an article is deleted from the database
+        '''
+        self.new_article.save_article()
+        artilces = Article.objects.all()
+        self.new_article.delete_article()
+        self.assertTrue( len(artilces) == 0 )
+
+    def test_get_articles(self):
+        '''
+        Test case to check if all articles are gotten from the database
+        '''
+        self.new_article.save_article()
+        gotten_articles = Article.get_articles()
+        artilces = Article.objects.all()
+        self.assertTrue( len(gotten_articles) == len(artilces))
+
+    def test_get_news_today(self):
+        '''
+        Test case to check if today's news is gotten from the database
+        '''
+        self.new_article.save_article()
+        today_news = Article.todays_news()
+        self.assertTrue( len(today_news) > 0)
+
+    def test_get_news_by_date(self):
+        '''
+        Test case to check if news is from a given date is gotten from a given day
+        '''
+        test_date = '2017-03-17'
+        date = dt.datetime.strptime(test_date, '%Y-%m-%d').date()
+        news_by_date = Article.days_news(date)
+        self.assertTrue( len(news_by_date) == 0)
+
+
 
 
 

@@ -1,4 +1,5 @@
 from django.db import models
+import datetime as dt
 
 # Create your models here.
 class Editor(models.Model):
@@ -108,5 +109,31 @@ class Article(models.Model):
         '''
         articles = Article.objects.all()
         return articles
+
+    @classmethod
+    def todays_news(cls):
+        '''
+        Method that gets today's news
+
+        Returns:
+            news : list of today's news objects from the database
+        '''
+        today = dt.date.today()
+        news = cls.objects.filter(pub_date__date=today)
+        return news
+
+    @classmethod
+    def days_news(cls,date):
+        '''
+        Method that gets news of a specific date
+
+        Args:
+            date : specific date from the user
+
+        Returns
+            news : list of news objects from the database with the specified date
+        '''
+        news = cls.objects.filter(pub_date__date=date)
+        return news
 
 
