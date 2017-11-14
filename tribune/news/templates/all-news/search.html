@@ -26,7 +26,13 @@
 
                     <div class="col-sm-6 col-md-3">
 
-                        <h1>{{article.title}}</h1>
+                        <a href="{% url 'article' article.id %}">
+
+                            <h2 class="text-center">
+                                {{article.title}}
+                            </h2>
+
+                        </a>
 
                     </div>
 
