@@ -83,6 +83,7 @@ class Article(models.Model):
     editor = models.ForeignKey(Editor, on_delete=models.CASCADE)
     tags = models.ManyToManyField(tags)
     pub_date = models.DateTimeField(auto_now_add=True, null=True)
+    article_image = models.ImageField(upload_to='articles/', null=True)
 
     def __str__(self):
         return self.title
