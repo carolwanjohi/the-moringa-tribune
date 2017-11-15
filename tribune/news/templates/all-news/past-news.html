@@ -10,23 +10,42 @@
 
             <div class="row">
 
-                <!-- Display news article title -->
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
-                    <a href="{% url 'article' news_item.id %}">
-
-                        <h2 class="text-center">
-                            {{news_item.title}}
-                        </h2>
-
-                    </a>
-
-                </div>
+                <hr>
 
                 <!-- Display news article image -->
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
                     <img src="{{news_item.article_image.url}}" alt="Image" class="img-responsive">
+
+                </div>
+
+                <hr>
+
+                <!-- Display news article title -->
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+                    <h2 class="text-center">
+
+                        <a href="{% url 'article' news_item.id %}">
+                                {{news_item.title}}
+                        </a>
+
+                        <br>
+                        
+                        <small>
+
+                            {% for tag in news_item.tags.all %}
+                                {{tag}}
+                            {% endfor %}
+
+                            <br>
+
+                            Published on {{news_item.pub_date}}
+                            
+                        </small>
+
+
+                    </h2>
 
                 </div>
 

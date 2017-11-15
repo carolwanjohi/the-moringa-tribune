@@ -18,30 +18,56 @@
 
         </div>
 
-        <div class="row">
+    {% if articles %}
 
-            {% if articles %}
+        {% for article in articles %}
 
-                {% for article in articles %}
+            <div class="row">
+                <hr>
 
-                    <div class="col-sm-6 col-md-3">
+                <!-- Display news article image -->
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
-                        <a href="{% url 'article' article.id %}">
+                    <img src="{{article.article_image.url}}" alt="Image" class="img-responsive">
 
-                            <h2 class="text-center">
-                                {{article.title}}
-                            </h2>
+                </div>
 
-                        </a>
+                <hr>
 
-                    </div>
+                <!-- Display news article title -->
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
-                {% endfor %}
+                    <h2 class="text-center">
 
-            {% endif %}
+                    <a href="{% url 'article' article.id %}">
+                    {{article.title}}
 
-        </div>
+                    </a>
+
+                    <br>
+
+                    <small>
+
+                    {% for tag in article.tags.all %}
+                    {{tag}}
+                    {% endfor %}
+
+                    <br>
+
+                    Published on {{article.pub_date}}
+
+                    </small>
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
         
+    {% endif %}
+
     </div>
 
 {% endblock %}

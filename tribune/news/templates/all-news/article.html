@@ -14,7 +14,15 @@
             <p>{{article.post}}</p>
         </div>
         <div class="row">
-            <p>Posted {{article.pub_date|timesince}} by {{article.editor.first_name}}</p>
+            <p>
+                Posted {{article.pub_date|timesince}} by {{article.editor.first_name}}
+                <br>
+
+                {% for tag in tags %}
+                    <small>{{tag}}</small>
+                {% endfor %}
+
+            </p>
         </div>
     </div>   
 {% endblock %}

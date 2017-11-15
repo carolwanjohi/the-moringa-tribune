@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render,redirect
 import datetime as dt
-from .models import Article
+from .models import Article, tags
 
 # Create view functions here
 def news_today(request):
@@ -10,6 +10,9 @@ def news_today(request):
     '''
     date = dt.date.today()
     news = Article.todays_news()
+    # news_tags = []
+    # for single_news in news:
+    #     news_tags = tags.filter(id=single_news.id).all()
 
     return render(request, 'all-news/today-news.html', {"date":date,"news":news})
 
@@ -54,10 +57,11 @@ def article(request,article_id):
     '''
     try:
         article = Article.objects.get(id=article_id)
+        tags = article.tags.all()
     except DoesNotExist:
         raise Http404()
 
-    return render(request, 'all-news/article.html', {"article":article})
+    return render(request, 'all-news/article.html', {"article":article, "tags":tags})
 
 
 
