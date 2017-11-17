@@ -4,6 +4,22 @@
     {{block.super}}
 
     <div class="container">
+        <!-- Loop though tags -->
+        <div class="row">
+
+            {% for tag in news_tags%}
+
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                        <h3>
+                            <a href="{%url 'tag' tag.id%}">{{tag}}</a>
+                        </h3>
+                        
+                    </div>
+
+            {% endfor %}
+                
+        </div>
 
         <!-- Loop through news list -->
         {% for news_item in news %}

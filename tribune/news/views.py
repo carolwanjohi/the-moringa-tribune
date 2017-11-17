@@ -10,11 +10,12 @@ def news_today(request):
     '''
     date = dt.date.today()
     news = Article.todays_news()
+    news_tags = tags.get_tags()
     # news_tags = []
     # for single_news in news:
     #     news_tags = tags.filter(id=single_news.id).all()
 
-    return render(request, 'all-news/today-news.html', {"date":date,"news":news})
+    return render(request, 'all-news/today-news.html', {"date":date,"news":news, "news_tags":news_tags})
 
 def past_days_news(request,past_date):
     '''
@@ -62,6 +63,18 @@ def article(request,article_id):
         raise Http404()
 
     return render(request, 'all-news/article.html', {"article":article, "tags":tags})
+
+def tag(request,tag_id):
+    '''
+    View function to display a single tag and its articles
+    '''
+    try:
+        tag = tags.objects.get(id=tag_id)
+        articles = Article.objects.filter(tags=tag).all()
+    except DoesNotExist:
+        raise Http404()
+    title = f'{tag}'
+    return render(request, 'all-news/tag.html', {"tag":tag, "articles":articles, "title":title})
 
 
 
