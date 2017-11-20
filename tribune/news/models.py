@@ -151,4 +151,25 @@ class Article(models.Model):
         news = cls.objects.filter(title__icontains=search_term)
         return news
 
+class NewsLetterRecipients(models.Model):
+    '''
+    Class that saves subscribers to the database
+    '''
+
+    name = models.CharField(max_length = 30)
+    email = models.EmailField()
+
+    @classmethod
+    def get_recipients(cls):
+        '''
+        Method that gets all the subscribers from the database
+
+        Returns:
+            recepients : list of all NewsLetterRecipients objects
+
+        '''
+        recepients = cls.objects.all()
+
+        return recepients
+
 

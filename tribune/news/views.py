@@ -1,7 +1,9 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render,redirect
 import datetime as dt
-from .models import Article, tags
+from .models import Article, tags, NewsLetterRecipients
+from .forms import NewsLetterForm
+from .email import send_welcome_email
 
 # Create view functions here
 def news_today(request):
@@ -14,8 +16,29 @@ def news_today(request):
     # news_tags = []
     # for single_news in news:
     #     news_tags = tags.filter(id=single_news.id).all()
+    if request.method == 'POST':
 
-    return render(request, 'all-news/today-news.html', {"date":date,"news":news, "news_tags":news_tags})
+        form = NewsLetterForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data['your_name']
+
+            email = form.cleaned_data['email']
+
+            recipient = NewsLetterRecipients(name=name, email=email)
+
+            recipient.save()
+
+            send_welcome_email(name,email)
+
+            HttpResponseRedirect('news_today')
+
+    else:
+
+        form = NewsLetterForm()
+
+    return render(request, 'all-news/today-news.html', {"date":date,"news":news,"letterForm":form})
+
 
 def past_days_news(request,past_date):
     '''
