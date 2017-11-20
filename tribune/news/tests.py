@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Editor,Article,tags
+from .models import Editor,Article,tags, NewsLetterRecipients
 import datetime as dt
 
 # Create your tests here.
@@ -179,6 +179,33 @@ class ArticleTestClass(TestCase):
         self.new_article.save_article()
         found_news = Article.search_by_title('James')
         self.assertTrue( len(found_news) == 1)
+
+class NewsLetterRecipientsTestClass(TestCase):
+    '''
+    Test case for NewsLetterRecipients class
+    '''
+
+    def setUp(self):
+        '''
+        Method that sets up an instance of News Letter Recipient before each test
+        '''
+        self.new_news_letter_recepient = NewsLetterRecipients(name="Jame Muriuki", email="james@moringaschool.com")
+
+    def test_instance(self):
+        '''
+        Test case to check if self.new_news_letter_recepient in an instance of NewsLetterRecipients class
+        '''
+        self.assertTrue( isinstance(self.new_news_letter_recepient, NewsLetterRecipients) )
+
+    def test_get_recipients(self):
+        '''
+        Test case to check if all news letter recipients are gotten from the database
+        '''
+        gotten_recipients = NewsLetterRecipients.get_recipients()
+        recipients = NewsLetterRecipients.objects.all()
+        self.assertTrue( len(gotten_recipients) == len(recipients))
+
+
 
 
 
