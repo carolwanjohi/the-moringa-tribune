@@ -1,51 +1,55 @@
 from django.test import TestCase
-from .models import Editor,Article,tags, NewsLetterRecipients
+from .models import Article,tags, NewsLetterRecipients
 import datetime as dt
+# Get User model from Django
+from django.contrib.auth.models import User
 
+
+# from .models import Editor,
 # Create your tests here.
-class EditorTestClass(TestCase):
-    '''
-    Test case for Editor class
-    '''
+# class EditorTestClass(TestCase):
+#     '''
+#     Test case for Editor class
+#     '''
 
-    # Set Up method
-    def setUp(self):
-        '''
-        Method that sets up an Editor instance before each test
-        '''
-        self.new_editor = Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
+#     # Set Up method
+#     def setUp(self):
+#         '''
+#         Method that sets up an Editor instance before each test
+#         '''
+#         self.new_editor = Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
 
-    def test_instance(self):
-        '''
-        Test case to check if self.new_editor in an instance of Editor class
-        '''
-        self.assertTrue( isinstance(self.new_editor, Editor) )
+#     def test_instance(self):
+#         '''
+#         Test case to check if self.new_editor in an instance of Editor class
+#         '''
+#         self.assertTrue( isinstance(self.new_editor, Editor) )
 
-    def test_save_editor(self):
-        '''
-        Test case to check is an editor is saved in the database
-        '''
-        self.new_editor.save_editor()
-        editors = Editor.objects.all()
-        self.assertTrue( len(editors) > 0 )
+#     def test_save_editor(self):
+#         '''
+#         Test case to check is an editor is saved in the database
+#         '''
+#         self.new_editor.save_editor()
+#         editors = Editor.objects.all()
+#         self.assertTrue( len(editors) > 0 )
 
-    def test_delete_editor(self):
-        '''
-        Test case to check if an editor is deleted from the database
-        '''
-        self.new_editor.save_editor()
-        editors = Editor.objects.all()
-        self.new_editor.delete_editor()
-        self.assertTrue( len(editors) == 0)
+#     def test_delete_editor(self):
+#         '''
+#         Test case to check if an editor is deleted from the database
+#         '''
+#         self.new_editor.save_editor()
+#         editors = Editor.objects.all()
+#         self.new_editor.delete_editor()
+#         self.assertTrue( len(editors) == 0)
 
-    def test_get_editors(self):
-        '''
-        Test case to check if all editors are gotten from the database
-        '''
-        self.new_editor.save_editor()
-        gotten_editors = Editor.get_editors()
-        editors = Editor.objects.all()
-        self.assertTrue( len(gotten_editors) == len(editors))
+#     def test_get_editors(self):
+#         '''
+#         Test case to check if all editors are gotten from the database
+#         '''
+#         self.new_editor.save_editor()
+#         gotten_editors = Editor.get_editors()
+#         editors = Editor.objects.all()
+#         self.assertTrue( len(gotten_editors) == len(editors))
 
 class tagsTestClass(TestCase):
     '''
@@ -102,8 +106,8 @@ class ArticleTestClass(TestCase):
         Method that sets up an Article instance before each test
         '''
         # Create and save an editor
-        self.james = Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
-        self.james.save_editor()
+        self.james = User(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
+        self.james.save()
 
         # Create and save a tag
         self.tag = tags(name='Testing')
@@ -132,7 +136,7 @@ class ArticleTestClass(TestCase):
         '''
         Test case to check is an Article is saved in the database
         '''
-        self.james.save_editor()
+        self.james.save()
         self.new_article.save_article()
         artilces = Article.objects.all()
         self.assertTrue( len(artilces) > 0 )
