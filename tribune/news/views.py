@@ -2,14 +2,14 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render,redirect
 import datetime as dt
 from .models import Article, tags, NewsLetterRecipients
-from .forms import NewsLetterForm
+from .forms import NewsLetterForm, NewsArticleForm
 from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
 
 # Create view functions here
 def news_today(request):
     '''
-    View function for the news of the current day
+    View function for the news of the current day and form for subscribing to News Letters
     '''
     date = dt.date.today()
     news = Article.todays_news()
@@ -31,7 +31,8 @@ def news_today(request):
 
             send_welcome_email(name,email)
 
-            HttpResponseRedirect('news_today')
+            # return HttpResponseRedirect('news_today')
+            return redirect(news_today)
 
     else:
 
@@ -78,7 +79,7 @@ def search_results(request):
 @login_required(login_url='/accounts/login')
 def article(request,article_id):
     '''
-    View function to display a single article
+    View function to display a single article to authenticated logged in users
     '''
     try:
         article = Article.objects.get(id=article_id)
@@ -87,6 +88,33 @@ def article(request,article_id):
         raise Http404()
 
     return render(request, 'all-news/article.html', {"article":article, "tags":tags})
+
+# Restrict view to only authorised users
+@login_required(login_url='/accounts/login')
+def new_article(request):
+    '''
+    View function to display a form for creating a new article to authenticated logged in users
+    '''
+    current_user = request.user
+    if request.method == 'POST':
+        # request.FILES cause an article has an image
+        form = NewsArticleForm(request.POST, request.FILES)
+        if form.is_valid:
+            article = form.save(commit=False)
+            article.editor = current_user
+            article.save()
+            return redirect(news_today)
+
+    else:
+        form = NewsArticleForm()
+    return render(request, 'new_article.html', {"form":form})
+
+
+
+
+
+
+
 
 
 
