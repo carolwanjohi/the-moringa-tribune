@@ -42,6 +42,56 @@
 
             </div>
 
+            <div class="col-sm-6 col-md-6" style="display:inline;">
+
+                {% if user.is_authenticated %}
+
+                    <ul  style="margin:0.5em;">
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button" aria-expanded="false"> 
+                               {{user.username|title}}'s Account
+                                <span class="caret"></span>
+
+                            </a>
+
+                            <ul class="dropdown-menu" role="menu">
+                                
+                                <li>
+
+                                    <a href="{% url 'newsToday'%}">Home</a>
+
+                                </li>
+
+                                <li>
+
+                                    <a href="/accounts/password/change">Change Password</a>
+                                    
+                                </li>
+
+                                <li>
+                                    
+                                    <a href="/logout">Logout</a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+                    </ul>
+                {% else %}
+
+                    <li>
+                        
+                        <a href="/accounts/login" class="btn btn-default" style="margin:0.5em;">Login</a>
+
+                    </li>
+
+                {% endif %}
+            </div>
+
         </div>
 
     </nav>

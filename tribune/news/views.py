@@ -4,6 +4,7 @@ import datetime as dt
 from .models import Article, tags, NewsLetterRecipients
 from .forms import NewsLetterForm
 from .email import send_welcome_email
+from django.contrib.auth.decorators import login_required
 
 # Create view functions here
 def news_today(request):
@@ -73,6 +74,8 @@ def search_results(request):
         message = "You haven't searched for any term"
         return render(request, 'all-news/search.html', {"message":message})
 
+# Restrict view to only authorised users
+@login_required(login_url='/accounts/login')
 def article(request,article_id):
     '''
     View function to display a single article
