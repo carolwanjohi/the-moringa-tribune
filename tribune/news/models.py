@@ -1,45 +1,48 @@
 from django.db import models
 import datetime as dt
+# Get User model from Django
+from django.contrib.auth.models import User
+from tinymce.models import HTMLField
 
 # Create your models here.
-class Editor(models.Model):
-    '''
-    Class that defines an Editor for an article
-    '''
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=10, blank=True)
+# class Editor(models.Model):
+#     '''
+#     Class that defines an Editor for an article
+#     '''
+#     first_name = models.CharField(max_length=30)
+#     last_name = models.CharField(max_length=30)
+#     email = models.EmailField()
+#     phone_number = models.CharField(max_length=10, blank=True)
 
-    def __str__(self):
-        # return ' %s' %  (self.first_name)
-        return self.first_name
+#     def __str__(self):
+#         # return ' %s' %  (self.first_name)
+#         return self.first_name
 
-    class Meta:
-        ordering = ['first_name']
+#     class Meta:
+#         ordering = ['first_name']
 
-    def save_editor(self):
-        '''
-        Method to save a new Editor to the database
-        '''
-        self.save()
+#     def save_editor(self):
+#         '''
+#         Method to save a new Editor to the database
+#         '''
+#         self.save()
 
-    def delete_editor(self):
-        '''
-        Method to delete an Editor from the database
-        '''
-        self.delete()
+#     def delete_editor(self):
+#         '''
+#         Method to delete an Editor from the database
+#         '''
+#         self.delete()
 
-    @classmethod
-    def get_editors(cls):
-        '''
-        Method that gets all editors from the database
+#     @classmethod
+#     def get_editors(cls):
+#         '''
+#         Method that gets all editors from the database
 
-        Returns:
-            editors : list of editor objects from the database
-        '''
-        editors = Editor.objects.all()
-        return editors
+#         Returns:
+#             editors : list of editor objects from the database
+#         '''
+#         editors = Editor.objects.all()
+#         return editors
 
 
 class tags(models.Model):
@@ -79,8 +82,8 @@ class Article(models.Model):
     Class that defines an Article
     '''
     title = models.CharField(max_length=60)
-    post = models.TextField()
-    editor = models.ForeignKey(Editor, on_delete=models.CASCADE)
+    post = HTMLField()
+    editor = models.ForeignKey(User,null=True)
     tags = models.ManyToManyField(tags)
     pub_date = models.DateTimeField(auto_now_add=True, null=True)
     article_image = models.ImageField(upload_to='articles/', null=True)
