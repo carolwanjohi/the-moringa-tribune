@@ -185,10 +185,43 @@ class MerchList(APIView):
         Configure API to allow addition of data to the database
         '''
         serializers = MerchSerializer(data=request.data)
+
         if serializers.is_valid():
+
             serializers.save()
+
             return Response(serializers.data, status=status.HTTP_201_CREATED)
+
         return Response(serializers.error, status=status.HTTP_404_BAD_REQUEST)
+
+    def put(self, request, pk, format=None):
+        '''
+        Method for updating an object
+        '''
+        merch = self.get_merch(pk)
+        serializers = MerchSerializer(merch, request.data)
+
+        if serializers.is_valid():
+
+            serializers.save()
+
+            return Response(serializers.data)
+
+        else:
+
+            return Response(serializers.error, status=status.HTTP_404_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        '''
+        Method for deleting an object
+        '''
+        merch = self.get_merch(pk)
+        merch.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
 
 
 
