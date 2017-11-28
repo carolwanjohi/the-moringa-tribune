@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .serializers import MerchSerializer
+from .permissions import IsAdminOrReadOnly
 
 # Create view functions here
 def news_today(request):
@@ -152,6 +153,8 @@ class MerchList(APIView):
     '''
     API view to handle requests
     '''
+    permission_classes = (IsAdminOrReadOnly,)
+
     def get(self, request, format=None):
         '''
         Get method where we query the database to get all MoringaMerch objects, serialize the data and return the serialized data as the response
