@@ -1,10 +1,13 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render,redirect
 import datetime as dt
-from .models import Article, tags, NewsLetterRecipients
+from .models import Article, tags, NewsLetterRecipients, MoringaMerch
 from .forms import NewsLetterForm, NewsArticleForm
 from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import MerchSerializer
 
 # Create view functions here
 def news_today(request):
@@ -144,6 +147,17 @@ def newsletter(request):
 
     return JsonResponse(data)
 
+class MerchList(APIView):
+    '''
+    API view to handle requests
+    '''
+    def get(self, request, format=None):
+        '''
+        Get method where we query the database to get all MoringaMerch objects, serialize the data and return the serialized data as the response
+        '''
+        all_merch = MoringaMerch.objects.all()
+        serializers = MerchSerializer(all_merch, many=True)
+        return Response(serializers.data)
 
 
 
