@@ -155,13 +155,30 @@ class MerchList(APIView):
     '''
     permission_classes = (IsAdminOrReadOnly,)
 
-    def get(self, request, format=None):
+    def get_merch(self, pk):
         '''
-        Get method where we query the database to get all MoringaMerch objects, serialize the data and return the serialized data as the response
+        Get method that queries the database for a single MoringaMerch object with the specified primary key
         '''
-        all_merch = MoringaMerch.objects.all()
-        serializers = MerchSerializer(all_merch, many=True)
+        try:
+            return MoringaMerch.objects.get(pk=pk)
+        except MoringaMerch.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        '''
+        Get method where we call the get_merch method, serialize the response and return it
+        '''
+        merch = self.get_merch(pk)
+        serializers = MerchSerializer(merch)
         return Response(serializers.data)
+
+    # def get(self, request, format=None):
+    #     '''
+    #     Get method where we query the database to get all MoringaMerch objects, serialize the data and return the serialized data as the response
+    #     '''
+    #     all_merch = MoringaMerch.objects.all()
+    #     serializers = MerchSerializer(all_merch, many=True)
+    #     return Response(serializers.data)
 
     def post(self, request, format=None):
         '''
