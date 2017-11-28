@@ -1,4 +1,4 @@
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render,redirect
 import datetime as dt
 from .models import Article, tags, NewsLetterRecipients
@@ -14,30 +14,34 @@ def news_today(request):
     date = dt.date.today()
     news = Article.todays_news()
     news_tags = tags.get_tags()
+    form = NewsLetterForm()
+
     # news_tags = []
     # for single_news in news:
     #     news_tags = tags.filter(id=single_news.id).all()
-    if request.method == 'POST':
 
-        form = NewsLetterForm(request.POST)
+    # Old NewsLetterForm
+    # if request.method == 'POST':
 
-        if form.is_valid():
-            name = form.cleaned_data['your_name']
+    #     form = NewsLetterForm(request.POST)
 
-            email = form.cleaned_data['email']
+    #     if form.is_valid():
+    #         name = form.cleaned_data['your_name']
 
-            recipient = NewsLetterRecipients(name=name, email=email)
+    #         email = form.cleaned_data['email']
 
-            recipient.save()
+    #         recipient = NewsLetterRecipients(name=name, email=email)
 
-            send_welcome_email(name,email)
+    #         recipient.save()
 
-            # return HttpResponseRedirect('news_today')
-            return redirect(news_today)
+    #         send_welcome_email(name,email)
 
-    else:
+    #         # return HttpResponseRedirect('news_today')
+    #         return redirect(news_today)
 
-        form = NewsLetterForm()
+    # else:
+
+        # form = NewsLetterForm()
 
     return render(request, 'all-news/today-news.html', {"date":date,"news":news,"letterForm":form})
 
@@ -123,6 +127,22 @@ def new_article(request):
     else:
         form = NewsArticleForm()
     return render(request, 'new_article.html', {"form":form})
+
+def newsletter(request):
+    '''
+    Function that asynchronously saves the news letter recipient to the database and sends a welcome email
+    '''
+    name = request.POST.get('your_name')
+    email = request.POST.get('email')
+
+    recipient = NewsLetterRecipients(name=name, email=email)
+    recipient.save()
+
+    send_welcome_email(name,email)
+
+    data = {'success':'You have been successfully added to the mailing list'}
+
+    return JsonResponse(data)
 
 
 
