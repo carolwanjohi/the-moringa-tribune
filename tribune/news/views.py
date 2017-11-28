@@ -7,6 +7,7 @@ from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 from .serializers import MerchSerializer
 
 # Create view functions here
@@ -159,6 +160,15 @@ class MerchList(APIView):
         serializers = MerchSerializer(all_merch, many=True)
         return Response(serializers.data)
 
+    def post(self, request, format=None):
+        '''
+        Configure API to allow addition of data to the database
+        '''
+        serializers = MerchSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.error, status=status.HTTP_404_BAD_REQUEST)
 
 
 
