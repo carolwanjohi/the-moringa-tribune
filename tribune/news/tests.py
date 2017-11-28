@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Article,tags, NewsLetterRecipients
+from .models import Article,tags, NewsLetterRecipients, MoringaMerch
 import datetime as dt
 # Get User model from Django
 from django.contrib.auth.models import User
@@ -208,6 +208,23 @@ class NewsLetterRecipientsTestClass(TestCase):
         gotten_recipients = NewsLetterRecipients.get_recipients()
         recipients = NewsLetterRecipients.objects.all()
         self.assertTrue( len(gotten_recipients) == len(recipients))
+
+class MoringaMerchTestClass(TestCase):
+    '''
+    Test case for MoringaMerch class
+    '''
+
+    def setUp(self):
+        '''
+        Method that sets up an instance of Moringa Merch before each test
+        '''
+        self.new_merch = MoringaMerch(name="Spock", description="Spock board", price=35.45)
+
+    def test_instance(self):
+        '''
+        Test case to check if self.new_merch in an instance of MoringaMerch class
+        '''
+        self.assertTrue( isinstance(self.new_merch, MoringaMerch) )
 
 
 
