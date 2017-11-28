@@ -2,7 +2,7 @@ from django import forms
 
 from django.contrib.auth.forms import AuthenticationForm
 # from mediumeditor.widgets import MediumEditorTextarea
-from .models import Article
+from .models import Article, tags
 
 class NewsLetterForm(forms.Form):
     '''
@@ -18,11 +18,17 @@ class NewsArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         exclude = ['editor','pub_date']
-        widgets = {
 
-            # 'post': forms.TimeInput(attrs={"col": 60, "row": 80}),
-            'tags': forms.CheckboxSelectMultiple()
-        }
+        # widgets = {
+
+        #     # 'post': forms.TimeInput(attrs={"col": 60, "row": 80}),
+        #     'tags': forms.CheckboxSelectMultiple()
+        # }
+        
+    tags = forms.ModelMultipleChoiceField(
+        queryset=tags.objects.all(),
+        widget=forms.CheckboxSelectMultiple()
+    )
 
 
 

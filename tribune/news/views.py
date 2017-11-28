@@ -117,6 +117,7 @@ def new_article(request):
             article = form.save(commit=False)
             article.editor = current_user
             article.save()
+            # article.tags.save()
             return redirect(news_today)
 
     else:
